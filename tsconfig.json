@@ -30,7 +30,6 @@
     "noImplicitAny": true,
     "importHelpers": true,
     "strictNullChecks": true,
-    "suppressImplicitAnyIndexErrors": true,
     "noUnusedLocals": true,
     "allowSyntheticDefaultImports": true,
     "rootDir": "./src",

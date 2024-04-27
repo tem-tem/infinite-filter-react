@@ -4,4 +4,3 @@ dist
 .rpt2_cache
 package-lock.json
 storybook-static
-.vscode
