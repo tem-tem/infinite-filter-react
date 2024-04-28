@@ -12,7 +12,9 @@ export interface InfiniteFilterProps {
   lists: Option[][];
   toggleLabel?: string;
   toggleLabelExpanded?: string;
-  onApply: (selectedOptions: Option[]) => void;
+  onApply: (clickedOption: Option[]) => void;
+  onSelect?: (selectedOptions: Option) => void;
+  onClear?: () => void;
 }
 
 export interface TogglerButtonProps {

@@ -36,7 +36,7 @@ const closeIcon = (
 );
 
 const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => {
-  const { lists, toggleLabel, toggleLabelExpanded, onApply } = props;
+  const { lists, toggleLabel, toggleLabelExpanded, onApply, onSelect, onClear } = props;
   const [savedDimensions, setSavedDimensions] = useState({ width: 0, height: 0 });
   const [isExpanded, setIsExpanded] = useState(false);
   const [activeStep, setActiveStep] = useState(0);
@@ -88,12 +88,15 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
     setselectedOptions((currentSelection) => {
       const clickedOption = { ...option, _listIndex: listIndex };
 
+      if (onSelect) onSelect(clickedOption);
+
       // filter out currently selected option in the lists[listIndex]
       const filteredSelection = currentSelection.filter((i) => i._listIndex !== listIndex);
 
       const clickedOptionIndexInCurrentSelection = filteredSelection.findIndex(
         (fs) => fs.value === clickedOption.value,
       );
+
       if (clickedOptionIndexInCurrentSelection === -1) {
         advanceStep();
         return [...filteredSelection, clickedOption];
@@ -103,6 +106,7 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
   };
 
   const handleClearClick = () => {
+    if (onClear) onClear();
     setActiveStep(0);
     setselectedOptions([]);
   };

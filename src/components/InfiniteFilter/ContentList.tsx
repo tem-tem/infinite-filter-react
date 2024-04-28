@@ -4,7 +4,7 @@ import ListItem from './ListItem';
 
 const ContentList: FC<ContentListProps> = ({ activeStep, lists, selectedOptions, onSelect }) => (
   <div className="content-list">
-    {lists.map((optionsList, listIndex) => (
+    {lists?.map((optionsList, listIndex) => (
       <div
         key={optionsList.map((o) => o.value).join('-')}
         className="content-list-inner"
