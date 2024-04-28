@@ -27,6 +27,7 @@ button {
   justify-content: center;
   gap: 0.5rem;
   
+  margin-left: auto;
   margin-right: auto;
   margin-bottom: auto;
   
@@ -38,7 +39,7 @@ button {
 
   white-space: nowrap;
 
-  transition: all 0.3s ease-out;
+  transition: all 0.3s ease-out, padding 0.3s 0s ease-out;
 }
 .infinite-filter-expand-button > .infinite-filter-icon {
   transition: all 0.3s ease-out;
@@ -47,6 +48,7 @@ button {
 }
 .infinite-filter-expand-button:focus {
   outline: none;
+  background-color: #f0f0f000;
 }
 .infinite-filter-main-wrapper[data-expanded="false"] > .infinite-filter-expand-button:hover > .infinite-filter-icon {
   margin-right: 0.4rem;
