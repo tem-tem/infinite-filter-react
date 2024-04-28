@@ -85,6 +85,7 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
   };
 
   const handleListOptionSelect = (option: Option, _: number, listIndex: number) => {
+    let adding = true;
     setselectedOptions((currentSelection) => {
       const clickedOption = { ...option, _listIndex: listIndex };
 
@@ -98,11 +99,13 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
       );
 
       if (clickedOptionIndexInCurrentSelection === -1) {
-        advanceStep();
         return [...filteredSelection, clickedOption];
       }
+      adding = false;
       return filteredSelection.filter((fs) => fs.value !== clickedOption.value);
     });
+
+    if (adding) advanceStep();
   };
 
   const handleClearClick = () => {
