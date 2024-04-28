@@ -1,20 +1,134 @@
-import { FC, useState } from 'react';
-import { InfiniteFilterProps } from '@src/types';
+import { FC, useCallback, useEffect, useRef, useState } from 'react';
+import { InfiniteFilterProps, Option } from '@src/types';
 import './index.css';
+import ExpandButton from './ExpandButton';
+import ContentList from './ContentList';
+import FooterControls from './FooterControls';
+
+const filterIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-6 h-6"
+  >
+    <path
+      strokeLinecap="round"
+      strokeLinejoin="round"
+      d="M10.5 6h9.75M10.5 6a1.5 1.5 0 1 1-3 0m3 0a1.5 1.5 0 1 0-3 0M3.75 6H7.5m3 12h9.75m-9.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-3.75 0H7.5m9-6h3.75m-3.75 0a1.5 1.5 0 0 1-3 0m3 0a1.5 1.5 0 0 0-3 0m-9.75 0h9.75"
+    />
+  </svg>
+);
+
+const closeIcon = (
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    fill="none"
+    viewBox="0 0 24 24"
+    strokeWidth={1.5}
+    stroke="currentColor"
+    className="w-6 h-6"
+  >
+    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18 18 6M6 6l12 12" />
+  </svg>
+);
 
 const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => {
-  const { label } = props;
-  const [expanded, setExpanded] = useState(false);
+  const { lists, toggleLabel, toggleLabelExpanded, onApply } = props;
+  const [savedDimensions, setSavedDimensions] = useState({ width: 0, height: 0 });
+  const [isExpanded, setIsExpanded] = useState(false);
+  const [activeStep, setActiveStep] = useState(0);
+  const [selectedOptions, setselectedOptions] = useState<Option[]>([]);
+  const ref = useRef<HTMLDivElement>(null);
 
-  const toggleExpanded = () => {
-    setExpanded((e) => !e);
+  useEffect(() => {
+    setActiveStep(0);
+  }, []);
+
+  useEffect(() => {
+    if (ref.current) {
+      setSavedDimensions({
+        width: ref.current.offsetWidth,
+        height: ref.current.offsetHeight,
+      });
+      ref.current.dataset.expanded = 'false';
+      ref.current.style.width = `${ref.current.offsetWidth}px`;
+      ref.current.style.height = `${ref.current.offsetHeight}px`;
+    }
+  }, []);
+
+  const toggleExpanded = useCallback(() => {
+    const element = ref.current;
+    if (!element) return;
+    if (element.dataset.expanded === 'false') {
+      setIsExpanded(true);
+      element.style.width = '100%';
+      element.style.height = '100%';
+      element.dataset.expanded = 'true';
+    } else {
+      setIsExpanded(false);
+      element.style.width = `${savedDimensions.width}px`;
+      element.style.height = `${savedDimensions.height}px`;
+      element.dataset.expanded = 'false';
+    }
+  }, [savedDimensions.height, savedDimensions.width, ref]);
+
+  const advanceStep = () => {
+    setActiveStep((s) => {
+      if (s < lists.length - 1) {
+        return s + 1;
+      }
+      return s;
+    });
+  };
+
+  const handleListOptionSelect = (option: Option, _: number, listIndex: number) => {
+    setselectedOptions((currentSelection) => {
+      const clickedOption = { ...option, _listIndex: listIndex };
+
+      // filter out currently selected option in the lists[listIndex]
+      const filteredSelection = currentSelection.filter((i) => i._listIndex !== listIndex);
+
+      const clickedOptionIndexInCurrentSelection = filteredSelection.findIndex(
+        (fs) => fs.value === clickedOption.value,
+      );
+      if (clickedOptionIndexInCurrentSelection === -1) {
+        advanceStep();
+        return [...filteredSelection, clickedOption];
+      }
+      return filteredSelection.filter((fs) => fs.value !== clickedOption.value);
+    });
+  };
+
+  const handleClearClick = () => {
+    setActiveStep(0);
+    setselectedOptions([]);
+  };
+
+  const handleApplyClick = () => {
+    onApply(selectedOptions);
+    setActiveStep(0);
+    toggleExpanded();
   };
 
   return (
-    <div className="main-wrapper" data-expaned={expanded}>
-      <button type="button" className="glow-on-hover" onClick={toggleExpanded}>
-        {label}
-      </button>
+    <div className="main-wrapper" ref={ref} data-expanded="false">
+      <ExpandButton
+        icon={isExpanded ? closeIcon : filterIcon}
+        onClick={toggleExpanded}
+        isFilterOpen={isExpanded}
+        label={toggleLabel || 'Open'}
+        expandedLabel={toggleLabelExpanded || 'Close'}
+      />
+      <ContentList
+        lists={lists}
+        selectedOptions={selectedOptions}
+        activeStep={activeStep}
+        onSelect={handleListOptionSelect}
+      />
+      <FooterControls onClear={handleClearClick} onApply={handleApplyClick} canApply={selectedOptions.length > 0} />
     </div>
   );
 };
