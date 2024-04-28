@@ -118,7 +118,7 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
   };
 
   return (
-    <div className="main-wrapper" ref={ref} data-expanded="false">
+    <div className="infinite-filter-main-wrapper" ref={ref} data-expanded="false">
       <ExpandButton
         icon={isExpanded ? closeIcon : filterIcon}
         onClick={toggleExpanded}

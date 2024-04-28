@@ -19,11 +19,11 @@ const ListItem: FC<ListItemProps> = ({ option, isSelected, onClick }: ListItemPr
     type="button"
     key={option.value}
     onClick={() => onClick(option)}
-    className="list-item"
+    className="infinite-filter-list-item"
     data-selected={isSelected}
   >
     <span>{option.label}</span>
-    <span className="icon">{chevronRight}</span>
+    <span className="infinite-filter-icon">{chevronRight}</span>
   </button>
 );
 

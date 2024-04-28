@@ -3,11 +3,11 @@ import { FC } from 'react';
 import ListItem from './ListItem';
 
 const ContentList: FC<ContentListProps> = ({ activeStep, lists, selectedOptions, onSelect }) => (
-  <div className="content-list">
+  <div className="infinite-filter-content-list">
     {lists?.map((optionsList, listIndex) => (
       <div
         key={optionsList.map((o) => o.value).join('-')}
-        className="content-list-inner"
+        className="infinite-filter-content-list-inner"
         data-active={listIndex === activeStep}
         data-past={listIndex < activeStep}
         data-future={listIndex > activeStep}

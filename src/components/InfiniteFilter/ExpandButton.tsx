@@ -8,8 +8,8 @@ const ExpandButton: FC<TogglerButtonProps> = ({
   label,
   expandedLabel,
 }: TogglerButtonProps) => (
-  <button type="button" className="expand-button" onClick={onClick}>
-    <span className="icon">{icon}</span>
+  <button type="button" className="infinite-filter-expand-button" onClick={onClick}>
+    <span className="infinite-filter-icon">{icon}</span>
     <span>{isFilterOpen ? expandedLabel || 'Close' : label || 'Open'}</span>
   </button>
 );
