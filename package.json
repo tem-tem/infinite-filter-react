@@ -1,6 +1,6 @@
 {
   "name": "infinite-filter-react",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "main": "dist/index.cjs.js",
   "module": "dist/index.esm.js",
   "repository": {
@@ -89,7 +89,8 @@
     "build-storybook": "build-storybook"
   },
   "files": [
-    "dist"
+    "dist",
+    "src/style"
   ],
   "lint-staged": {
     "src/**/*.{js,jsx,ts,tsx}": [

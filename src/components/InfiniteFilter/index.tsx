@@ -1,6 +1,5 @@
 import { FC, useCallback, useEffect, useRef, useState } from 'react';
 import { InfiniteFilterProps, Option } from '@src/types';
-import './index.css';
 import ExpandButton from './ExpandButton';
 import ContentList from './ContentList';
 import FooterControls from './FooterControls';
@@ -49,13 +48,12 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
 
   useEffect(() => {
     if (ref.current) {
-      setSavedDimensions({
-        width: ref.current.offsetWidth,
-        height: ref.current.offsetHeight,
-      });
+      const width = ref.current.clientWidth;
+      const height = ref.current.clientHeight;
+      setSavedDimensions({ width, height });
       ref.current.dataset.expanded = 'false';
-      ref.current.style.width = `${ref.current.offsetWidth}px`;
-      ref.current.style.height = `${ref.current.offsetHeight}px`;
+      ref.current.style.width = `${width}px`;
+      ref.current.style.height = `${height}px`;
     }
   }, []);
 
