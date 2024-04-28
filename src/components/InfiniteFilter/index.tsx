@@ -84,11 +84,8 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
 
   const handleListOptionSelect = (option: Option, _: number, listIndex: number) => {
     let adding = true;
+    const clickedOption = { ...option, _listIndex: listIndex };
     setselectedOptions((currentSelection) => {
-      const clickedOption = { ...option, _listIndex: listIndex };
-
-      if (onSelect) onSelect(clickedOption);
-
       // filter out currently selected option in the lists[listIndex]
       const filteredSelection = currentSelection.filter((i) => i._listIndex !== listIndex);
 
@@ -103,6 +100,7 @@ const InfiniteFilter: FC<InfiniteFilterProps> = (props: InfiniteFilterProps) => 
       return filteredSelection.filter((fs) => fs.value !== clickedOption.value);
     });
 
+    if (onSelect) onSelect(clickedOption);
     if (adding) advanceStep();
   };
 
